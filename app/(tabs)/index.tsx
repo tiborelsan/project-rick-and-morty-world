@@ -1,7 +1,7 @@
 import { StyleSheet, useColorScheme } from 'react-native';
 
 import { Text, View } from '@/components/organisms/Themed';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FlashList } from '@shopify/flash-list';
 import Card from '@/components/molecules/Card';
 import { SimpleText } from '@/components/atoms/SimpleText';
@@ -15,9 +15,13 @@ export default function TabOneScreen() {
     const [search, setSearch] = useState("");
     const [error, setError] = useState("");
     const [datas, setDatas] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
-        _getCharacters();
+        if(page > 1)
+            _getCharacters();
     }, [page]);
 
     useEffect(() => {
@@ -25,22 +29,37 @@ export default function TabOneScreen() {
         setPage(1);
         setDatas([]);
 
-        _getCharacters();
+        _getCharacters(true);
     }, [search]);
 
-    const _getCharacters = async () => {
+    const _getCharacters = (reset: boolean = false) => {
+        if (loading || !hasMore) return;
+
+        setLoading(true);
         setError("");
 
         CharacterApi.getCharacters(page, search)
             .then((data: any) => {
-                setDatas(data.results);
+                setDatas(prevDatas => reset ? data.results : [...prevDatas, ...data.results]);
+                setHasMore(data.results.length > 0);
             })
             .catch((error: any) => {
-                setError(error);
+                setError(error.message || "An error occurred");
+            })
+            .finally(() => {
+                setLoading(false);
+                if (reset) setRefreshing(false);
             });
     }
 
-    const renderItem = ({item, index}: any) => {
+    // Fonction pour rafraîchir la liste
+    const handleRefresh = useCallback(() => {
+        setRefreshing(true);
+        setPage(1);
+        _getCharacters(true);
+    }, []);
+
+    const renderItem = ({ item, index }: any) => {
         return <Card id={item.id} name={item.name} species={item.species} gender={item.gender} image={item.image} isReverse={index % 2 != 0} />
     }
 
@@ -49,7 +68,7 @@ export default function TabOneScreen() {
     )
 
     return (
-        <View style={[styles.container, {backgroundColor: Colors[colorScheme ?? 'light'].secondary}]}>
+        <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].secondary }]}>
             <FlashList
                 contentContainerStyle={{ padding: 16, paddingHorizontal: 24 }}
                 renderItem={renderItem}
@@ -57,6 +76,11 @@ export default function TabOneScreen() {
                 ItemSeparatorComponent={() => <View style={{ height: 16, backgroundColor: Colors[colorScheme ?? 'light'].secondary }} />}
                 ListEmptyComponent={renderEmpty}
                 keyExtractor={(item: any) => item.id.toString()}
+                onEndReached={() => setPage(prevPage => prevPage + 1)} // Next page
+                onEndReachedThreshold={0.3} // Load at 30% before the end     
+                ListFooterComponent={loading ? <SimpleText>Loading...</SimpleText> : null}
+                refreshing={refreshing}
+                onRefresh={handleRefresh}
                 estimatedItemSize={100} />
         </View>
     );
