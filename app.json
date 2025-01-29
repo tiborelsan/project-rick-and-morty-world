@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "world-of-cocktails",
-    "slug": "world-of-cocktails",
+    "name": "morty-verse",
+    "slug": "morty-verse",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "com.test.mortyverse",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
