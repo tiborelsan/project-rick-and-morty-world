@@ -4,5 +4,5 @@ import { useColorScheme } from 'react-native';
 
 export function SimpleText(props: TextProps) {
   const colorScheme = useColorScheme();
-  return <Text {...props} style={{ fontFamily: 'SpaceMono', color: Colors[colorScheme ?? 'light'].textLight }} />;
+  return <Text {...props} style={[{ fontFamily: 'SpaceMono', color: Colors[colorScheme ?? 'light'].textLight }, props.style]} />;
 }

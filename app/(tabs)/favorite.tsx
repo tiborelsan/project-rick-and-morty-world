@@ -7,6 +7,7 @@ import { FlashList } from '@shopify/flash-list';
 import Colors from '@/constants/Colors';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { NoData } from '@/components/molecules/NoData';
 
 export default function TabFavoriteScreen() {
     const colorScheme = useColorScheme();
@@ -17,7 +18,10 @@ export default function TabFavoriteScreen() {
     }
 
     const renderEmpty = () => (
-        <SimpleText>No favorite(s)</SimpleText>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <SimpleText>No favorite(s)</SimpleText>
+            <NoData />
+        </View>
     )
 
     return (

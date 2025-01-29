@@ -1,4 +1,4 @@
-import { StyleSheet, useColorScheme } from 'react-native';
+import { Keyboard, StyleSheet, useColorScheme } from 'react-native';
 
 import { Text, View } from '@/components/organisms/Themed';
 import { useCallback, useEffect, useState } from 'react';
@@ -7,6 +7,9 @@ import Card from '@/components/molecules/Card';
 import { SimpleText } from '@/components/atoms/SimpleText';
 import { CharacterApi } from '@/api';
 import Colors from '@/constants/Colors';
+import { SimpleInput } from '@/components/molecules/SimpleInput';
+import useDebounce from '@/hooks/useDebounce';
+import { NoData } from '@/components/molecules/NoData';
 
 export default function TabOneScreen() {
     const colorScheme = useColorScheme();
@@ -19,8 +22,10 @@ export default function TabOneScreen() {
     const [hasMore, setHasMore] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
 
+    const debounceSearch = useDebounce(search, 1000);
+
     useEffect(() => {
-        if(page > 1)
+        if (page > 1)
             _getCharacters();
     }, [page]);
 
@@ -29,8 +34,10 @@ export default function TabOneScreen() {
         setPage(1);
         setDatas([]);
 
+        Keyboard.dismiss();
+
         _getCharacters(true);
-    }, [search]);
+    }, [debounceSearch]);
 
     const _getCharacters = (reset: boolean = false) => {
         if (loading || !hasMore) return;
@@ -44,7 +51,7 @@ export default function TabOneScreen() {
                 setHasMore(data.results.length > 0);
             })
             .catch((error: any) => {
-                setError(error.message || "An error occurred");
+                setError(error.response.data.error || "An error occurred");
             })
             .finally(() => {
                 setLoading(false);
@@ -64,7 +71,10 @@ export default function TabOneScreen() {
     }
 
     const renderEmpty = () => (
-        <SimpleText>{error ?? 'No data'}</SimpleText>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <SimpleText>{error ?? "An error occured"}</SimpleText>
+            <NoData />
+        </View>
     )
 
     return (
@@ -82,6 +92,8 @@ export default function TabOneScreen() {
                 refreshing={refreshing}
                 onRefresh={handleRefresh}
                 estimatedItemSize={100} />
+
+            <SimpleInput onChangeText={setSearch} placeholder='Search here..' />
         </View>
     );
 }
