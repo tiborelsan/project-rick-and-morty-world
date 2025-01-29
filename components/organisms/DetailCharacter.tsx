@@ -1,18 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet, useColorScheme, Image, Dimensions, ScrollView, Animated, TouchableOpacity } from 'react-native';
+import { StyleSheet, useColorScheme, Dimensions, Animated, TouchableOpacity } from 'react-native';
 
 import { View } from '@/components/organisms/Themed';
 import { SimpleText } from '@/components/atoms/SimpleText';
 import Colors from '@/constants/Colors';
 import { useEffect, useRef, useState } from 'react';
 import { CharacterApi } from '@/api';
-import { useLocalSearchParams } from 'expo-router';
 import { format } from 'date-fns';
-import DetailCharacter from '@/components/organisms/DetailCharacter';
 
-export default function DetailScreen() {
+export default function DetailCharacter({id, style} : {id: number, style?: any}) {
     const colorScheme = useColorScheme();
-    const params: any = useLocalSearchParams();
 
     const [character, setCharacter] = useState<any>(null);
     const [error, setError] = useState("");
@@ -25,7 +21,7 @@ export default function DetailScreen() {
 
     useEffect(() => {
         _getCharacterDetail();
-    }, []);
+    }, [id]);
 
     const handleImagePress = () => {
         setClickCount(prev => prev + 1);
@@ -50,7 +46,7 @@ export default function DetailScreen() {
     const _getCharacterDetail = () => {
         setLoading(true);
 
-        CharacterApi.getCharacterDetail(params.id)
+        CharacterApi.getCharacterDetail(id)
             .then((data: any) => {
                 setCharacter(data);
             })
@@ -64,7 +60,7 @@ export default function DetailScreen() {
 
     if (error && error !== "") {
         return (
-            <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].primary }]}>
+            <View>
                 <SimpleText style={styles.title}>{error}</SimpleText>
             </View>
         );
@@ -72,7 +68,7 @@ export default function DetailScreen() {
 
     if (loading) {
         return (
-            <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].primary }]}>
+            <View>
                 <SimpleText style={styles.title}>Loading ...</SimpleText>
             </View>
         );
@@ -80,28 +76,32 @@ export default function DetailScreen() {
 
     if (character === null) {
         return (
-            <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].primary }]}>
+            <View>
                 <SimpleText style={styles.title}>No data</SimpleText>
             </View>
         );
     }
 
     return (
-        <ScrollView contentContainerStyle={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].primary }]}>
-            <DetailCharacter id={params.id} />
+        <View style={style}>
+            <TouchableOpacity onPress={handleImagePress} activeOpacity={1}>
+                <Animated.Image
+                    source={{ uri: character.image }}
+                    style={{ width: width / 2, height: width / 2, transform: [{ rotate: spin }] }}
+                />
+            </TouchableOpacity>
 
-            {/* Use a light status bar on iOS to account for the black space above the modal */}
-            <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-        </ScrollView>
+            <SimpleText style={styles.title}>{character.name}</SimpleText>
+            <SimpleText style={styles.info}>{character.species}</SimpleText>
+            <SimpleText style={styles.info}>{character.gender}</SimpleText>
+            <SimpleText style={styles.info}>Number of episode : {character.episode.length}</SimpleText>
+            <SimpleText style={styles.info}>Location : {character.location.name}</SimpleText>
+            <SimpleText style={styles.info}>Created date : {format(character.created, "PPP")}</SimpleText>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        padding: 16
-    },
     title: {
         fontSize: 20,
         fontWeight: 'bold',
