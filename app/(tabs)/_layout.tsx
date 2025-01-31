@@ -5,7 +5,6 @@ import { Pressable } from 'react-native';
 
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -30,7 +29,8 @@ export default function TabLayout() {
                 name="index"
                 options={{                    
                     headerShown: false,
-                    tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+                    title: 'Home',
+                    tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
                     headerRight: () => (
                         <Link href="/modal" asChild>
                             <Pressable>
@@ -51,7 +51,8 @@ export default function TabLayout() {
                 name="favorite"
                 options={{
                     headerShown: false,
-                    tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+                    title: 'Favorites',
+                    tabBarIcon: ({ color }) => <TabBarIcon name="star" color={color} />,
                 }}
             />
             
@@ -59,7 +60,8 @@ export default function TabLayout() {
                 name="random"
                 options={{
                     headerShown: false,
-                    tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+                    title: 'Random',
+                    tabBarIcon: ({ color }) => <TabBarIcon name="random" color={color} />,
                 }}
             />
         </Tabs>

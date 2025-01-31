@@ -48,38 +48,39 @@ export default (props: ICardProps) => {
             dispatch(removeFavorite(favorite));
         }
         else {
-            animation.current?.play();
+            animation.current?.play(0, 60);
             dispatch(addFavorite(favorite));
         }
     }
 
     return (
-        <Link href={{ pathname: "/detail", params: { id: props.id, title: props.name } }} key={props.id}>
-            <View style={[styles.card, { backgroundColor: Colors[colorScheme ?? 'light'].primary, flexDirection: props.isReverse ? 'row-reverse' : 'row' }]}>
-                <Image source={{ uri: props.image }} style={{ width: 50, height: 50 }} />
-                <View style={styles.info}>
-                    <SimpleText>{props.name}</SimpleText>
-                    <SimpleText>{props.species}</SimpleText>
-                    <SimpleText>{props.gender}</SimpleText>
+        <Link href={{ pathname: "/detail", params: { id: props.id, title: props.name } }} key={props.id} style={{ padding: 8 }} testID='card-test'>
+            <View style={[styles.card, { width: '100%' }]}>
+                <View style={{ zIndex: 5, width: 100, height: 100, position: 'relative' }}>
+                    <Image source={{ uri: props.image }} style={{ width: 100, height: 100, borderRadius: 180, borderWidth: 5, borderColor: Colors[colorScheme ?? 'light'].secondary }} />
+
+                    <LottieView
+                        ref={animation}
+                        autoPlay={false}
+                        loop={false}
+                        style={{
+                            width: 56,
+                            height: 56,
+                            position: 'absolute',
+                            top: -12,
+                            right: -12
+                        }}
+                        source={require('../../assets/lottie/favorite.json')}
+                    />
+                    <TouchableOpacity activeOpacity={0.7} style={styles.favorite} onPress={toggleFavorite}>
+                        <FontAwesome name={isFavorite ? "star" : "star-o"} size={40} color={Colors[colorScheme ?? 'light'].favorite} />
+                    </TouchableOpacity>
                 </View>
-
-                <LottieView
-                    ref={animation}
-                    autoPlay={false}
-                    loop={false}
-                    style={{
-                        width: 46,
-                        height: 46,
-                        position: 'absolute',
-                        top: -16.5,
-                        right: -16.5,
-                    }}
-                    source={require('../../assets/lottie/favorite.json')}
-                />
-
-                <TouchableOpacity activeOpacity={0.7} style={styles.favorite} onPress={toggleFavorite}>
-                    <FontAwesome name={isFavorite ? "star" : "star-o"} size={30} color={Colors[colorScheme ?? 'light'].favorite} />
-                </TouchableOpacity>
+                <View style={[styles.info, { backgroundColor: Colors[colorScheme ?? 'light'].primary }]}>
+                    <SimpleText style={{ fontSize: 16 }} bold>{props.name}</SimpleText>
+                    <SimpleText><SimpleText bold>Species :</SimpleText> {props.species}</SimpleText>
+                    <SimpleText><SimpleText bold>Gender :</SimpleText> {props.gender}</SimpleText>
+                </View>
             </View>
         </Link>
     );
@@ -87,20 +88,25 @@ export default (props: ICardProps) => {
 
 const styles = StyleSheet.create({
     card: {
-        height: 100,
-        borderRadius: 16,
-        padding: 16,
-        paddingHorizontal: 24
+        flexDirection: 'column',
+        alignItems: 'center'
     },
     info: {
-        flex: 1,
+        borderRadius: 16,
         backgroundColor: 'transparent',
-        alignItems: 'flex-end'
+        paddingHorizontal: 16,
+        paddingTop: 50,
+        marginTop: -45,
+        paddingBottom: 16,
+        width: '100%'
     },
     favorite: {
         position: 'absolute',
-        top: -8,
-        right: -8,
+        right: -3,
+        top: -3,
         elevation: 5,
-    }
+    },
+    reversed: {
+
+    },
 });

@@ -29,9 +29,9 @@ export default function TabRandomScreen() {
 
     return (
         <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].secondary }]}>
-            {id > 0 && <DetailCharacter id={id} style={{flex: 1, alignItems: 'center', padding: 16}} />}
-            <TouchableOpacity onPress={getRandomId} activeOpacity={0.7} style={{ padding: 10, backgroundColor: Colors[colorScheme ?? 'light'].primary }}>
-                <SimpleText>Random</SimpleText>
+            {id > 0 && <DetailCharacter id={id} style={{alignItems: 'center', padding: 16}} />}
+            <TouchableOpacity onPress={getRandomId} activeOpacity={0.7} style={{ padding: 10, paddingHorizontal: 16, borderRadius: 8, backgroundColor: Colors[colorScheme ?? 'light'].primary }}>
+                <SimpleText bold style={{fontSize: 17}}>Random</SimpleText>
             </TouchableOpacity>
         </View>
     );
@@ -39,6 +39,8 @@ export default function TabRandomScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
     }
 });

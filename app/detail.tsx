@@ -64,7 +64,7 @@ export default function DetailScreen() {
 
     if (error && error !== "") {
         return (
-            <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].primary }]}>
+            <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].secondary }]}>
                 <SimpleText style={styles.title}>{error}</SimpleText>
             </View>
         );
@@ -72,7 +72,7 @@ export default function DetailScreen() {
 
     if (loading) {
         return (
-            <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].primary }]}>
+            <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].secondary }]}>
                 <SimpleText style={styles.title}>Loading ...</SimpleText>
             </View>
         );
@@ -80,15 +80,15 @@ export default function DetailScreen() {
 
     if (character === null) {
         return (
-            <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].primary }]}>
+            <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].secondary }]}>
                 <SimpleText style={styles.title}>No data</SimpleText>
             </View>
         );
     }
 
     return (
-        <ScrollView contentContainerStyle={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].primary }]}>
-            <DetailCharacter id={params.id} />
+        <ScrollView contentContainerStyle={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].secondary }]}>
+            <DetailCharacter id={params.id} style={{alignItems: 'center', padding: 16}} />
 
             {/* Use a light status bar on iOS to account for the black space above the modal */}
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
+        justifyContent: 'center',
         padding: 16
     },
     title: {

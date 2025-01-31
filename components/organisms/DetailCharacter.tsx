@@ -2,7 +2,6 @@ import { StyleSheet, useColorScheme, Dimensions, Animated, TouchableOpacity } fr
 
 import { View } from '@/components/organisms/Themed';
 import { SimpleText } from '@/components/atoms/SimpleText';
-import Colors from '@/constants/Colors';
 import { useEffect, useRef, useState } from 'react';
 import { CharacterApi } from '@/api';
 import { format } from 'date-fns';
@@ -87,16 +86,16 @@ export default function DetailCharacter({id, style} : {id: number, style?: any})
             <TouchableOpacity onPress={handleImagePress} activeOpacity={1}>
                 <Animated.Image
                     source={{ uri: character.image }}
-                    style={{ width: width / 2, height: width / 2, transform: [{ rotate: spin }] }}
+                    style={{ width: width / 2, height: width / 2, transform: [{ rotate: spin }], borderRadius: 180 }}
                 />
             </TouchableOpacity>
 
             <SimpleText style={styles.title}>{character.name}</SimpleText>
-            <SimpleText style={styles.info}>{character.species}</SimpleText>
-            <SimpleText style={styles.info}>{character.gender}</SimpleText>
-            <SimpleText style={styles.info}>Number of episode : {character.episode.length}</SimpleText>
-            <SimpleText style={styles.info}>Location : {character.location.name}</SimpleText>
-            <SimpleText style={styles.info}>Created date : {format(character.created, "PPP")}</SimpleText>
+            <SimpleText style={styles.info}><SimpleText bold>Species :</SimpleText>{character.species}</SimpleText>
+            <SimpleText style={styles.info}><SimpleText bold>Gender :</SimpleText> {character.gender}</SimpleText>
+            <SimpleText style={styles.info}><SimpleText bold>Number of episode :</SimpleText> {character.episode.length}</SimpleText>
+            <SimpleText style={styles.info}><SimpleText bold>Location :</SimpleText> {character.location.name}</SimpleText>
+            <SimpleText style={styles.info}><SimpleText bold>Created date :</SimpleText> {format(character.created, "PPP")}</SimpleText>
         </View>
     );
 }

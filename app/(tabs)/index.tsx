@@ -2,7 +2,7 @@ import { Keyboard, StyleSheet, useColorScheme } from 'react-native';
 
 import { Text, View } from '@/components/organisms/Themed';
 import { useCallback, useEffect, useState } from 'react';
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, MasonryFlashList } from '@shopify/flash-list';
 import Card from '@/components/molecules/Card';
 import { SimpleText } from '@/components/atoms/SimpleText';
 import { CharacterApi } from '@/api';
@@ -10,6 +10,7 @@ import Colors from '@/constants/Colors';
 import { SimpleInput } from '@/components/molecules/SimpleInput';
 import useDebounce from '@/hooks/useDebounce';
 import { NoData } from '@/components/molecules/NoData';
+import { BlurView } from 'expo-blur';
 
 export default function TabOneScreen() {
     const colorScheme = useColorScheme();
@@ -79,11 +80,11 @@ export default function TabOneScreen() {
 
     return (
         <View style={[styles.container, { backgroundColor: Colors[colorScheme ?? 'light'].secondary }]}>
-            <FlashList
-                contentContainerStyle={{ padding: 16, paddingHorizontal: 24 }}
+            <MasonryFlashList
+                contentContainerStyle={{ padding: 16, paddingHorizontal: 24, paddingBottom: 81 }}
                 renderItem={renderItem}
                 data={datas}
-                ItemSeparatorComponent={() => <View style={{ height: 16, backgroundColor: Colors[colorScheme ?? 'light'].secondary }} />}
+                numColumns={2}
                 ListEmptyComponent={renderEmpty}
                 keyExtractor={(item: any) => item.id.toString()}
                 onEndReached={() => setPage(prevPage => prevPage + 1)} // Next page
@@ -93,7 +94,9 @@ export default function TabOneScreen() {
                 onRefresh={handleRefresh}
                 estimatedItemSize={100} />
 
-            <SimpleInput onChangeText={setSearch} placeholder='Search here..' />
+            <BlurView experimentalBlurMethod='dimezisBlurView' intensity={5} style={{ position: 'absolute', bottom: 0, width: '100%', height: 65 }}>
+                <SimpleInput onChangeText={setSearch} placeholder='Search here..' placeholderTextColor={'#FFF'} style={{backgroundColor: 'rgba(45, 45, 45, .2)', color: '#FFF', height: 65, paddingHorizontal: 24}} />
+            </BlurView>
         </View>
     );
 }
