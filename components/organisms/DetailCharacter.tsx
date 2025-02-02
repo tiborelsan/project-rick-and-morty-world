@@ -5,6 +5,8 @@ import { SimpleText } from '@/components/atoms/SimpleText';
 import { useEffect, useRef, useState } from 'react';
 import { CharacterApi } from '@/api';
 import { format } from 'date-fns';
+import Colors from '@/constants/Colors';
+import { SimpleLoading } from '../atoms/SimpleLoading';
 
 export default function DetailCharacter({id, style} : {id: number, style?: any}) {
     const colorScheme = useColorScheme();
@@ -13,6 +15,7 @@ export default function DetailCharacter({id, style} : {id: number, style?: any})
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const [clickCount, setClickCount] = useState(0);
+    const colorText = Colors[colorScheme ?? 'light'].textLight;
 
     const rotation = useRef(new Animated.Value(0)).current;
 
@@ -68,7 +71,7 @@ export default function DetailCharacter({id, style} : {id: number, style?: any})
     if (loading) {
         return (
             <View>
-                <SimpleText style={styles.title}>Loading ...</SimpleText>
+                <SimpleLoading />
             </View>
         );
     }
@@ -90,12 +93,12 @@ export default function DetailCharacter({id, style} : {id: number, style?: any})
                 />
             </TouchableOpacity>
 
-            <SimpleText style={styles.title}>{character.name}</SimpleText>
-            <SimpleText style={styles.info}><SimpleText bold>Species :</SimpleText>{character.species}</SimpleText>
-            <SimpleText style={styles.info}><SimpleText bold>Gender :</SimpleText> {character.gender}</SimpleText>
-            <SimpleText style={styles.info}><SimpleText bold>Number of episode :</SimpleText> {character.episode.length}</SimpleText>
-            <SimpleText style={styles.info}><SimpleText bold>Location :</SimpleText> {character.location.name}</SimpleText>
-            <SimpleText style={styles.info}><SimpleText bold>Created date :</SimpleText> {format(character.created, "PPP")}</SimpleText>
+            <SimpleText style={styles.title} color={colorText}>{character.name}</SimpleText>
+            <SimpleText style={styles.info} color={colorText}><SimpleText bold color={colorText}>Species :</SimpleText>{character.species}</SimpleText>
+            <SimpleText style={styles.info} color={colorText}><SimpleText bold color={colorText}>Gender :</SimpleText> {character.gender}</SimpleText>
+            <SimpleText style={styles.info} color={colorText}><SimpleText bold color={colorText}>Number of episode :</SimpleText> {character.episode.length}</SimpleText>
+            <SimpleText style={styles.info} color={colorText}><SimpleText bold color={colorText}>Location :</SimpleText> {character.location.name}</SimpleText>
+            <SimpleText style={styles.info} color={colorText}><SimpleText bold color={colorText}>Created date :</SimpleText> {format(character.created, "PPP")}</SimpleText>
         </View>
     );
 }

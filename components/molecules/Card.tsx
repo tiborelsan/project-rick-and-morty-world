@@ -54,8 +54,8 @@ export default (props: ICardProps) => {
     }
 
     return (
-        <Link href={{ pathname: "/detail", params: { id: props.id, title: props.name } }} key={props.id} style={{ padding: 8 }} testID='card-test'>
-            <View style={[styles.card, { width: '100%' }]}>
+        <Link href={{ pathname: "/detail", params: { id: props.id, title: props.name } }} key={props.id} style={{ padding: 8 }}>
+            <View testID='card-test' style={[styles.card, { width: '100%' }]}>
                 <View style={{ zIndex: 5, width: 100, height: 100, position: 'relative' }}>
                     <Image source={{ uri: props.image }} style={{ width: 100, height: 100, borderRadius: 180, borderWidth: 5, borderColor: Colors[colorScheme ?? 'light'].secondary }} />
 
@@ -72,7 +72,7 @@ export default (props: ICardProps) => {
                         }}
                         source={require('../../assets/lottie/favorite.json')}
                     />
-                    <TouchableOpacity activeOpacity={0.7} style={styles.favorite} onPress={toggleFavorite}>
+                    <TouchableOpacity testID='favorite-button' activeOpacity={0.7} style={styles.favorite} onPress={toggleFavorite}>
                         <FontAwesome name={isFavorite ? "star" : "star-o"} size={40} color={Colors[colorScheme ?? 'light'].favorite} />
                     </TouchableOpacity>
                 </View>

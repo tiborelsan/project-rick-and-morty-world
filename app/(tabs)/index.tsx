@@ -1,8 +1,8 @@
 import { Keyboard, StyleSheet, useColorScheme } from 'react-native';
 
-import { Text, View } from '@/components/organisms/Themed';
+import { View } from '@/components/organisms/Themed';
 import { useCallback, useEffect, useState } from 'react';
-import { FlashList, MasonryFlashList } from '@shopify/flash-list';
+import { MasonryFlashList } from '@shopify/flash-list';
 import Card from '@/components/molecules/Card';
 import { SimpleText } from '@/components/atoms/SimpleText';
 import { CharacterApi } from '@/api';
@@ -11,6 +11,7 @@ import { SimpleInput } from '@/components/molecules/SimpleInput';
 import useDebounce from '@/hooks/useDebounce';
 import { NoData } from '@/components/molecules/NoData';
 import { BlurView } from 'expo-blur';
+import { SimpleLoading } from '@/components/atoms/SimpleLoading';
 
 export default function TabOneScreen() {
     const colorScheme = useColorScheme();
@@ -72,8 +73,9 @@ export default function TabOneScreen() {
     }
 
     const renderEmpty = () => (
+        loading ? <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}><SimpleLoading /></View>:
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <SimpleText>{error ?? "An error occured"}</SimpleText>
+            <SimpleText color={Colors[colorScheme ?? 'light'].textLight}>{error ?? "An error occured"}</SimpleText>
             <NoData />
         </View>
     )
@@ -88,8 +90,7 @@ export default function TabOneScreen() {
                 ListEmptyComponent={renderEmpty}
                 keyExtractor={(item: any) => item.id.toString()}
                 onEndReached={() => setPage(prevPage => prevPage + 1)} // Next page
-                onEndReachedThreshold={0.3} // Load at 30% before the end     
-                ListFooterComponent={loading ? <SimpleText>Loading...</SimpleText> : null}
+                onEndReachedThreshold={0.3} // Load at 30% before the end
                 refreshing={refreshing}
                 onRefresh={handleRefresh}
                 estimatedItemSize={100} />

@@ -1,0 +1,12 @@
+export const FontAwesome = jest.fn(() => null);
+export const MaterialIcons = jest.fn(() => null);
+export const Ionicons = jest.fn(() => null);
+export const AntDesign = jest.fn(() => null);
+export const Entypo = jest.fn(() => null);
+export const Feather = jest.fn(() => null);
+export const FontAwesome5 = jest.fn(() => null);
+export const Foundation = jest.fn(() => null);
+export const MaterialCommunityIcons = jest.fn(() => null);
+export const Octicons = jest.fn(() => null);
+export const SimpleLineIcons = jest.fn(() => null);
+export const Zocial = jest.fn(() => null);

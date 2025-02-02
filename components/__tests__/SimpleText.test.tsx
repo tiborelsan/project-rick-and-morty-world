@@ -1,6 +1,6 @@
 import React from "react";
 import { SimpleText } from "../atoms/SimpleText";
-import { renderWithProviders } from "../test";
+import { renderWithProviders } from "./base.test";
 
 describe("SimpleText", () => {
     const renderWithTheme = (props: any) => (
